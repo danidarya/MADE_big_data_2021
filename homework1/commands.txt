@@ -1,0 +1,45 @@
+См. флаги “-mkdir” и “-touchz“
+
+1. Создайте папку в корневой HDFS-папке
+   hdfs dfs -mkdir /homework01
+2. Cоздайте в созданной папке новую вложенную папку.
+   hdfs dfs -mkdir -p /homework01/task2
+3. Что такое Trash в распределенной FS? Как сделать так, чтобы файлы удалялись сразу, минуя “Trash”?
+   Это папка, куда попадают файлы при удалении (корзина). Чтобы файлы удалялись сразу, нужно 
+   вызвать команду -rm с флагом -skipTrash 
+4. Создайте пустой файл в подпапке из пункта 2.
+   hdfs dfs -touchz /homework01/task2/file
+5. Удалите созданный файл.
+   hdfs dfs -rm -skipTrash /homework01/task2/file
+6. Удалите созданные папки.
+   hdfs dfs -rm -r -skipTrash /homework01
+   
+См. флаги “-put”, “-cat”, “-tail”, “-cp”
+
+1. Скопируйте любой файл в новую папку на HDFS
+   hdfs dfs -mkdir /new_folder           
+   hdfs dfs -put new_file.txt /new_folder
+2. Выведите содержимое HDFS-файла на экран.
+   hdfs dfs -cat /new_folder/new_file.txt
+3. Выведите содержимое нескольких последних строчек HDFS-файла на экран.
+   hdfs dfs -cat /new_folder/new_file.txt | tail -3
+4. Выведите содержимое нескольких первых строчек HDFS-файла на экран.
+   hdfs dfs -cat /new_folder/new_file.txt | head -3
+5. Переместите копию файла в HDFS на новую локацию.
+   hdfs dfs -mkdir /second_folder
+   hdfs dfs -cp /new_folder/new_file.txt /second_folder/new_file.txt
+   
+   Полезные флаги:
+● Для “hdfs dfs”, см. “-setrep -w”
+● hdfs fsck /path -files - blocks -locations
+
+   Задачи:
+2. Изменить replication factor для файла. Как долго занимает время на увеличение /
+уменьшение числа реплик для файла?
+   hdfs dfs -setrep -w 2 /new_folder/new_file.txt
+   Время на уменьшение числа реплик до 2 и увеличения до обратно до 3 занимает несколько секунд.
+3. Найдите информацию по файлу, блокам и их расположениям с помощью “hdfs fsck”
+   hdfs fsck /new_folder/new_file.txt -files -blocks -locations
+4. Получите информацию по любому блоку из п.2 с помощью "hdfs fsck -blockId”.
+Обратите внимание на Generation Stamp (GS number).
+   hdfs fsck -blockId blk_1073741839
