@@ -1,0 +1,5 @@
+mapreduce mean price is  152.7206871868289
+numpy mean price is 152.7206871868289
+------------------------------------
+mapreduce price variance is  57672.8456984336
+numpy price variance is 57672.84569843359
