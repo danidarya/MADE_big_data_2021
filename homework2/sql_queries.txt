@@ -6,8 +6,6 @@ SELECT t.artist_lastfm FROM (
     ORDER BY scrobbles_lastfm DESC
     LIMIT 1 ) t
 
-![Результат](/query_results/result1.png?raw=true)
-
 2. Самый популярный тэг на lastfm
 
 SELECT top_tags.tag FROM(
