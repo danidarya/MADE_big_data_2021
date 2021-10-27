@@ -1,0 +1,5 @@
+Dataset splitted for train and valid parts. Train size is 899 rows, validation size is 300 rows.
+Model is fitted.
+Mean Squared Error on validation is 0.49934965739797377.
+Predictions were done and written to /src/predictions.csv.
+Mean Squared Error on prediction is 0.3934105915554825.
