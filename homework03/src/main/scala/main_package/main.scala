@@ -17,7 +17,7 @@ object Main{
 
     val trainData = csvread(new File(args(0)), separator = ',', skipLines = 1)
     val trainSize = 0.75
-    val (trainX, trainY, validX, validY) = TrainTestSplit.split(trainData,trainSize) //(trainData(::, 0 until trainData.cols - 1), trainData(::, -1))
+    val (trainX, trainY, validX, validY) = TrainTestSplit.split(trainData, trainSize) 
     bw.write(f"Dataset splitted for train and valid parts. Train size is ${(trainData.rows * trainSize).toInt} rows, " +
       f"validation size is ${trainData.rows - (trainData.rows * trainSize).toInt} rows.\n")
     val testData = csvread(new File(args(1)), separator = ',', skipLines = 1)
