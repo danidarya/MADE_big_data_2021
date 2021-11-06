@@ -1,0 +1,513 @@
+{
+  "paragraphs": [
+    {
+      "text": "spark",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-06 13:19:28.124",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres1\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.SparkSession\u001b[0m \u003d org.apache.spark.sql.SparkSession@7d87ae0\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1636194193743_208776529",
+      "id": "paragraph_1636194193743_208776529",
+      "dateCreated": "2021-11-06 10:23:13.744",
+      "dateStarted": "2021-11-06 13:19:28.129",
+      "dateFinished": "2021-11-06 13:19:38.098",
+      "status": "FINISHED"
+    },
+    {
+      "text": "val data \u003d spark.read\n                .option(\"header\", \"true\")\n                .option(\"inferSchema\", \"true\")\n                .option(\"sep\", \",\")\n                .csv(\"/notebook/tripadvisor_hotel_reviews.csv\")\ndata.show(5)",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-06 13:19:30.031",
+      "progress": 100,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------------+------+\n|              Review|Rating|\n+--------------------+------+\n|nice hotel expens...|     4|\n|ok nothing specia...|     2|\n|nice rooms not 4*...|     3|\n|unique, great sta...|     5|\n|great stay great ...|     5|\n+--------------------+------+\nonly showing top 5 rows\n\n\u001b[1m\u001b[34mdata\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [Review: string, Rating: int]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d0"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d1"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d2"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1636194199142_1752590067",
+      "id": "paragraph_1636194199142_1752590067",
+      "dateCreated": "2021-11-06 10:23:19.142",
+      "dateStarted": "2021-11-06 13:19:30.432",
+      "dateFinished": "2021-11-06 13:19:41.154",
+      "status": "FINISHED"
+    },
+    {
+      "text": "val data_with_id \u003d data.withColumn(\"review_id\", monotonically_increasing_id())\n                       .withColumn(\"Review\", regexp_replace(lower(col(\"Review\")), \"[^a-zA-Z0-9]+\", \" \"))\n                       .withColumn(\"Review\", trim(col(\"Review\")))\n                       .withColumn(\"token\", explode(split(col(\"Review\"),\" \")))\n\ndata_with_id.show(5)",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-06 13:19:43.914",
+      "progress": 100,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------------+------+---------+---------+\n|              Review|Rating|review_id|    token|\n+--------------------+------+---------+---------+\n|nice hotel expens...|     4|        0|     nice|\n|nice hotel expens...|     4|        0|    hotel|\n|nice hotel expens...|     4|        0|expensive|\n|nice hotel expens...|     4|        0|  parking|\n|nice hotel expens...|     4|        0|      got|\n+--------------------+------+---------+---------+\nonly showing top 5 rows\n\n\u001b[1m\u001b[34mdata_with_id\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [Review: string, Rating: int ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d3"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1636194201426_566354762",
+      "id": "paragraph_1636194201426_566354762",
+      "dateCreated": "2021-11-06 10:23:21.426",
+      "dateStarted": "2021-11-06 13:19:43.918",
+      "dateFinished": "2021-11-06 13:19:44.432",
+      "status": "FINISHED"
+    },
+    {
+      "text": "val TF \u003d data_with_id.groupBy(\"review_id\",\"token\")\n                     .agg(count(\"Review\") as \"tf\")\n                     .orderBy(\"review_id\")\nTF.show(5)\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-06 13:19:51.625",
+      "progress": 92,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+---------+-----+---+\n|review_id|token| tf|\n+---------+-----+---+\n|        0|  bed|  1|\n|        0| room|  3|\n|        0|taken|  1|\n|        0|night|  2|\n|        0| took|  1|\n+---------+-----+---+\nonly showing top 5 rows\n\n\u001b[1m\u001b[34mTF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m \u003d [review_id: bigint, token: string ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d4"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1636194209635_2077136779",
+      "id": "paragraph_1636194209635_2077136779",
+      "dateCreated": "2021-11-06 10:23:29.635",
+      "dateStarted": "2021-11-06 13:19:51.629",
+      "dateFinished": "2021-11-06 13:19:56.771",
+      "status": "FINISHED"
+    },
+    {
+      "text": "val DF \u003d data_with_id.groupBy(\"token\")\n                     .agg(countDistinct(\"review_id\") as \"df\")\n                     .orderBy(desc(\"df\"))\n                     .limit(100)\nDF.show(5)",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-06 13:20:10.409",
+      "progress": 95,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-----+-----+\n|token|   df|\n+-----+-----+\n|hotel|16402|\n| room|14206|\n|  not|12155|\n|staff|11768|\n|great|11128|\n+-----+-----+\nonly showing top 5 rows\n\n\u001b[1m\u001b[34mDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m \u003d [token: string, df: bigint]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d5"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1636198003944_722251324",
+      "id": "paragraph_1636198003944_722251324",
+      "dateCreated": "2021-11-06 11:26:43.945",
+      "dateStarted": "2021-11-06 13:20:10.412",
+      "dateFinished": "2021-11-06 13:20:17.544",
+      "status": "FINISHED"
+    },
+    {
+      "text": "val reviewsNumber \u003d data.count().toDouble\nval calcIdfUdf \u003d udf { df: Long \u003d\u003e math.log((reviewsNumber + 1) / (df.toDouble + 1))}\nval IDF \u003d DF.withColumn(\"idf\", calcIdfUdf(col(\"df\")))\nIDF.show()",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-06 13:20:22.806",
+      "progress": 76,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+---------+-----+-------------------+\n|    token|   df|                idf|\n+---------+-----+-------------------+\n|    hotel|16402| 0.2225703211466071|\n|     room|14206|0.36629976518701574|\n|      not|12155| 0.5222116910224093|\n|    staff|11768| 0.5545656101814307|\n|    great|11128| 0.6104802520856678|\n|     stay|10193| 0.6982352541591059|\n|     good| 9402|  0.779005778782016|\n|        t| 8604| 0.8676911364134532|\n|   stayed| 8569| 0.8717668334672675|\n|    rooms| 8533| 0.8759763813111476|\n|        n| 8430| 0.8881191771364173|\n| location| 8363| 0.8960977845105688|\n|    clean| 7797| 0.9661672755165504|\n|     just| 7767|  0.970021835087932|\n|     nice| 7500| 1.0049982210894566|\n|breakfast| 7409| 1.0172041267689602|\n|      did| 7251| 1.0387572731843513|\n|       no| 6896| 1.0889480316278015|\n|    night| 6693|  1.118822963287821|\n|  service| 6380| 1.1667097411907459|\n+---------+-----+-------------------+\nonly showing top 20 rows\n\n\u001b[1m\u001b[34mreviewsNumber\u001b[0m: \u001b[1m\u001b[32mDouble\u001b[0m \u003d 20491.0\n\u001b[1m\u001b[34mcalcIdfUdf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.expressions.UserDefinedFunction\u001b[0m \u003d UserDefinedFunction(\u003cfunction1\u003e,DoubleType,Some(List(LongType)))\n\u001b[1m\u001b[34mIDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [token: string, df: bigint ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d6"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d7"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1636200129666_1460692509",
+      "id": "paragraph_1636200129666_1460692509",
+      "dateCreated": "2021-11-06 12:02:09.666",
+      "dateStarted": "2021-11-06 13:20:22.811",
+      "dateFinished": "2021-11-06 13:20:28.805",
+      "status": "FINISHED"
+    },
+    {
+      "text": "val TF_IDF \u003d TF.join(IDF, Seq(\"token\"), \"inner\")\n               .withColumn(\"tf_idf\", col(\"tf\") * col(\"idf\"))\nTF_IDF.show()",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-06 13:20:33.828",
+      "progress": 74,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+---------+---+-----+-------------------+------------------+\n|   token|review_id| tf|   df|                idf|            tf_idf|\n+--------+---------+---+-----+-------------------+------------------+\n|    room|        0|  3|14206|0.36629976518701574|1.0988992955610473|\n|   night|        0|  2| 6693|  1.118822963287821| 2.237645926575642|\n|     bed|        0|  1| 3864| 1.6680728840375707|1.6680728840375707|\n|  people|        0|  1| 4159|  1.594519491803784| 1.594519491803784|\n|     got|        0|  1| 4175| 1.5906807154966183|1.5906807154966183|\n|location|        0|  1| 8363| 0.8960977845105688|0.8960977845105688|\n|     not|        0|  2|12155| 0.5222116910224093|1.0444233820448185|\n|     did|        0|  2| 7251| 1.0387572731843513|2.0775145463687026|\n| morning|        0|  1| 2649|  2.045474926078825| 2.045474926078825|\n|    like|        0|  1| 5399| 1.3336356125067272|1.3336356125067272|\n|    nice|        0|  5| 7500| 1.0049982210894566| 5.024991105447283|\n|  little|        0|  1| 4416| 1.5345738334625663|1.5345738334625663|\n|   great|        0|  1|11128| 0.6104802520856678|0.6104802520856678|\n|   clean|        0|  1| 7797| 0.9661672755165504|0.9661672755165504|\n| reviews|        0|  1| 3112| 1.8844476746174847|1.8844476746174847|\n| overall|        0|  1| 2471| 2.1150070264815115|2.1150070264815115|\n|   check|        0|  1| 3083|  1.893807110375873| 1.893807110375873|\n| walking|        0|  1| 2596| 2.0656776333963447|2.0656776333963447|\n|    good|        0|  1| 9402|  0.779005778782016| 0.779005778782016|\n|    just|        0|  1| 7767|  0.970021835087932| 0.970021835087932|\n+--------+---------+---+-----+-------------------+------------------+\nonly showing top 20 rows\n\n\u001b[1m\u001b[34mTF_IDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [token: string, review_id: bigint ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d8"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d9"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d10"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1636199540785_1375876506",
+      "id": "paragraph_1636199540785_1375876506",
+      "dateCreated": "2021-11-06 11:52:20.785",
+      "dateStarted": "2021-11-06 13:20:33.831",
+      "dateFinished": "2021-11-06 13:20:44.833",
+      "status": "FINISHED"
+    },
+    {
+      "text": "val result \u003d TF_IDF.groupBy(\"review_id\")\n                   .pivot(\"token\")\n                   .agg(round(first(col(\"tf_idf\"), ignoreNulls \u003d true), 4))\n                   .orderBy(\"review_id\")\n                   \nresult.show()\n          ",
+      "user": "anonymous",
+      "dateUpdated": "2021-11-06 13:20:51.761",
+      "progress": 91,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+---------+----+------+------+------+------+------+-------+------+------+--------+-----+---------+------+------+------+------+----+------+---------+------+------+------+------+------+-----------+------+------+----------+-------+------+---------+----------+---------+-----+------+------+--------+------+-----+------+------+-------+------+------+----+------+------+------+------+--------+------+------+-------+-------+------+----+------+-----+------+------+------+------+-------+------+-------+------+----+------+-------+------+------+------+---------+------+----------+-----------+-------+------+------+------+------+-------+------+------+------+------+------+------+------+------+------+------+------+------+-------+-----+------+------+------+---------+\n|review_id|  10|     2|     3|     4|     5|  area|arrived|  away|   bar|bathroom|beach|beautiful|   bed|  best|better|   big| bit|booked|breakfast|buffet| check|  city| clean| close|comfortable|   day|  days|definitely|   desk|   did|excellent|experience|fantastic|floor|  food|  free|friendly| going| good|   got| great|helpful| hotel|hotels|just| large|  like|little| lobby|location| loved|  make|minutes|morning|     n|need|   new| nice| night|nights|    no|   not|overall|people|perfect| place|pool| price|problem| quiet| quite|really|recommend|resort|restaurant|restaurants|reviews| right|  room| rooms|   say|service|shower| small| staff|  stay|stayed|street|     t|   the|  time|  trip|  view|  walk|walking| want| water|   way|  went|wonderful|\n+---------+----+------+------+------+------+------+-------+------+------+--------+-----+---------+------+------+------+------+----+------+---------+------+------+------+------+------+-----------+------+------+----------+-------+------+---------+----------+---------+-----+------+------+--------+------+-----+------+------+-------+------+------+----+------+------+------+------+--------+------+------+-------+-------+------+----+------+-----+------+------+------+------+-------+------+-------+------+----+------+-------+------+------+------+---------+------+----------+-----------+-------+------+------+------+------+-------+------+------+------+------+------+------+------+------+------+------+------+------+-------+-----+------+------+------+---------+\n|        0|null|  null|  null|  null|  null|  null| 2.1412|  null|  null|    null| null|     null|1.6681|  null|  null|  null|null|  null|     null|  null|1.8938|  null|0.9662|  null|     1.6458|  null|  null|      null|   null|2.0775|     null|    2.0223|     null| null|  null|  null|    null|  null|0.779|1.5907|0.6105|   null|0.4451|  null|0.97|  null|1.3336|1.5346|  null|  0.8961|  null|  null|   null| 2.0455|  null|null|  null|5.025|2.2376|  null|  null|1.0444|  2.115|1.5945|   null|  null|null|  null|   null|  null|  null|  null|     null|  null|      null|       null| 1.8844|  null|1.0989|  null|  null|   null|  null|  null|  null|1.3965|  null|  null|  null|  null|  null|  null|1.7727|  null| 2.0657| null|  null|  null|  null|     null|\n|        1|null|3.0248|  null|5.6036|1.6076|  null| 2.1412|1.8081|  null|  3.0951| null|     null|  null|1.5605| 3.651|  null|null|1.8541|   3.0516|  null|  null|  null|0.9662|  null|     1.6458|1.2326|  null|      null| 7.3729|2.0775|     null|      null|     null| null|  null|1.8682|    null|  null|3.116| 4.772|0.6105| 1.3578|1.1129|3.6329|null|  null|2.6673|  null|  null|    null|  null|1.8844|   null| 2.0455|  null|null|  null|1.005|2.2376|  null|3.2668|4.1777|   null|  null|   null|  null|null|  null|   null|  null|  null| 1.432|     null|  null|      null|       null|   null|  null|2.1978|  null|  null|   null|  null|  null|1.1091|0.6982|  null|  null|  null|1.4594|  null|1.7256|1.7727|  null|   null| null|  null|  null|  null|     null|\n|        2|null|3.0248| 3.279|3.7358|  null|  null|   null|1.8081|  null|  3.0951| null|     null|3.3361|  null|  null|2.1158|null|  null|     null|  null|1.8938|  null|  null|  null|     1.6458|  null|  null|      null| 5.5297|3.1163|     null|    2.0223|     null| null|  null|  null|    null|2.0649|0.779|3.1814|1.8314|   null|0.6677|  null|null|1.9325|  null|  null|  null|    null|  null|  null|   null| 6.1364|5.3287|null|  null|3.015|5.5941|  null|2.1779|0.5222|   null|  null|   null|  null|null|1.8777|   null|  null|  null|  null|     null|  null|      null|       null|   null|  null|2.9304| 0.876|  null| 1.1667|2.1178|  null|  null|2.7929|  null|  null|5.2061|1.4594|  null|  null|  null|  null|   null| null|1.8967|1.8261|  null|     null|\n|        3|null|1.5124|  null|  null|  null|3.1411|   null|  null|  null|    null| null|     null|  null|  null|  null|2.1158|null|  null|     null|  null|  null|  null|  null|  null|       null|  null|  null|      null|   null|2.0775|   3.0191|      null|     null| null|  null|3.7364|  2.4582|  null| null|  null|1.8314|   null|0.8903|  null|null|  null|2.6673|  null|2.0557|  0.8961|  null|  null|   null|   null|1.7762|null|  null| 2.01|  null|  null|1.0889|  null|   null|  null|   null|  null|null|  null|   null|  null|  null|  null|     null|  null|      null|       null|   null|  null|0.3663|  null|  null| 1.1667|  null|  null|0.5546|1.3965|  null|  null|1.7354|  null|1.1814|  null|  null|  null|   null| null|  null|  null|  null|   1.8945|\n|        4|null|1.5124|  null|  null|  null|1.5705|   null|1.8081|  null|  1.5476| null|     null|  null|1.5605|1.8255|  null|null|1.8541|     null|  null|1.8938|1.8941|  null|  null|       null|  null|  null|      null| 1.8432|5.1938|     null|      null|     null|1.765|  null|  null|    null|2.0649|0.779|1.5907|2.4419| 1.3578|0.4451|1.8165|1.94|1.9325|  null|  null|  null|    null|  null|  null|   null|   null|5.3287|null|  null| null|  null|  null|1.0889|1.0444|   null|  null|   null|1.3396|null|1.8777| 2.1525|  null|  null|  null|   1.5724|  null|      null|       null|   null|1.8126|0.7326|  null|  null| 2.3334|  null|  null|0.5546|1.3965|  null|1.9783|5.2061|  null|1.1814|  null|1.7727|1.4627|   null|1.871|  null|1.8261|1.8575|   1.8945|\n|        5|null|  null|  null|  null|3.2152|  null|   null|  null|  null|    null| null|   1.7866|  null|1.5605|1.8255|  null|null|1.8541|     null|  null|  null|  null|  null|  null|       null|  null|  null|    2.0157| 1.8432|  null|     null|      null|     null| null|1.2955|  null|    null|  null|0.779|  null|  null|   null|0.4451|  null|null|  null|  null|  null|  null|    null|  null|  null|   null| 2.0455|0.8881|null|  null| null|  null|  null|  null|0.5222|   null|  null|   null|1.3396|null|  null|   null|2.1002|  null|  null|     null|  null|     3.379|       null|   null|  null|0.7326|  null|  null| 1.1667|  null|  null|0.5546|1.3965|0.8718|  null|0.8677|  null|  null|  null|  null|  null|   null| null|  null|1.8261|1.8575|   1.8945|\n|        6|null|  null|  null|  null|  null|  null|   null|  null|  null|  1.5476| null|     null|  null|  null|  null|  null|null|1.8541|     null|  null|  null|1.8941|0.9662|  null|     4.9374|  null|  null|      null|   null|1.0388|     null|    2.0223|     null| null|  null|  null|  1.2291|  null|1.558|  null|0.6105|   null|0.2226|  null|null|1.9325|  null|  null|  null|  0.8961|  null|  null|   null|   null|  null|null|  null| null|  null|1.6519|  null|0.5222|   null|  null|   null|  null|null|  null| 2.1525|  null|2.0294|  null|     null|  null|      null|       null|   null|  null|0.7326| 0.876|  null|   null|  null|1.4333|1.1091|1.3965|  null| 5.935|  null|1.4594|  null|1.7256|1.7727|1.4627|   null| null|  null|  null|  null|     null|\n|        7|null|  null|  null|  null|  null|1.5705|   null|  null|  null|    null| null|     null|1.6681|  null|  null|  null|null|  null|     null|  null|  null|  null|  null|1.9883|       null|  null|  null|      null| 1.8432|  null|   3.0191|      null|     null| null|1.2955|  null|    null|  null|0.779|  null|0.6105|   null|0.2226|  null|null|  null|1.3336|  null|  null|  0.8961|  null|3.7689|   null|   null|  null|null|  null|1.005|  null|  null|  null|0.5222|   null|  null|   null|  null|null|  null|   null|  null|  null|  null|     null|  null|      null|       null|   null|  null|  null|  null|  null| 2.3334|  null|  null|3.3274|  null|  null|1.9783|  null|  null|  null|  null|  null|  null| 2.0657| null|  null|1.8261|1.8575|     null|\n|        8|null|  null|  null|  null|  null|  null|   null|1.8081|  null|    null| null|     null|3.3361|  null|  null|  null|null|  null|     null|  null|  null|  null|  null|  null|       null|  null|  null|      null|   null|  null|     null|      null|     null| null|1.2955|  null|    null|  null| null|  null| 1.221|   null|0.6677|  null|null|  null|1.3336|1.5346|  null|  0.8961|  null|  null|   null|   null|  null|null|  null| null|  null|  null|  null|  null|   null|  null|   null|  null|null|  null|   null|  null|  null|  null|     null|  null|      null|       null|   null|  null|0.7326| 0.876|  null|   null|  null|  null|  null|  null|0.8718|  null|  null|  null|  null|  null|  null|1.4627|   null| null|  null|  null|  null|     null|\n|        9|null|  null|  null|  null|  null|  null|   null|  null|  null|    null| null|     null|1.6681|  null|  null|  null|null|  null|     null|  null|  null|  null|  null|  null|     1.6458|  null|  null|      null|   null|  null|   1.5095|    2.0223|     null| null|  null|  null|  1.2291|  null| null|  null|0.6105|   null|0.2226|  null|null|  null|  null|  null|  null|    null|2.0875|  null|   null|   null|  null|null|  null| null|  null|  null|  null|  null|  2.115|  null|   null|  null|null|  null|   null|  null|  null|  null|     null|  null|      null|      1.635|   null|  null|0.3663|  null|  null|   null|  null|1.4333|1.1091|  null|0.8718|  null|  null|  null|  null|  null|  null|  null|   null| null|  null|  null|  null|     null|\n|       10|null|  null|  null|  null|  null|  null|   null|  null|  null|    null| null|     null|  null| 3.121|  null|  null|null|  null|     null|  null|  null|  null|  null|  null|       null|  null|  null|      null|   null|  null|     null|    2.0223|     null| null|  null|  null|    null|  null| null|  null|  null|   null|0.4451|  null|null|  null|1.3336|  null|  null|    null|  null|  null|   null|   null|1.7762|null|  null| 2.01|2.2376|  null|  null|0.5222|   null|  null|   null|  null|null|  null|   null|  null|  null|  null|     null|  null|      null|       null|   null|  null|  null|  null|  null|   null|  null|  null|  null|  null|1.7435|  null|1.7354|  null|  null|  null|  null|  null|   null| null|  null|  null|  null|     null|\n|       11|null|  null|  null|1.8679|1.6076|1.5705|   null|  null|  null|    null| null|     null|1.6681|  null|  null|  null|null|  null|     null|  null|  null|  null|  null|  null|     1.6458|  null|1.9929|    2.0157|   null|  null|     null|      null|     null| null|  null|  null|    null|  null| null|  null|  null|   null|  null|  null|null|  null|  null|  null|  null|    null|  null|  null|   null|   null|0.8881|null|  null| 2.01|  null|1.6519|  null|  null|   null|1.5945|   null|  null|null|  null|   null|  null|  null|  null|     null|  null|      null|       null|   null|  null|0.7326|  null|1.9766| 2.3334|  null|1.4333|  null|0.6982|0.8718|  null|0.8677|  null|1.1814|  null|  null|  null|   null| null|  null|  null|  null|     null|\n|       12|null|  null|  null|  null|  null|  null|   null|  null|  null|  1.5476| null|     null|  null|  null|  null|  null|null|  null|     null|  null|  null|1.8941|0.9662|  null|       null|  null|  null|      null|   null|  null|     null|      null|     null|1.765|  null|  null|  1.2291|  null|0.779|  null|  null| 1.3578|0.8903|  null|null|  null|  null|1.5346|  null|  2.6883|  null|  null|   null|   null|  null|null|2.0443| 2.01|1.1188|  null|  null|1.0444|   null|  null|   null|1.3396|null|  null| 2.1525|  null|  null|  null|     null|  null|      null|       null|   null|  null|0.3663|2.6279|  null|   null|  null|  null|0.5546|0.6982|  null|  null|  null|1.4594|  null|  null|  null|  null|   null| null|  null|  null|  null|     null|\n|       13|null|1.5124|  null|  null|1.6076|  null|   null|  null|  null|    null| null|     null|  null|  null|  null|  null|null|  null|     null|  null|1.8938|  null|  null|  null|       null|1.2326|  null|      null| 3.6865|  null|     null|      null|     null| null|  null|  null|  1.2291|2.0649| null|1.5907|  null|   null|0.4451|  null|null|  null|  null|  null|  null|    null|  null|1.8844| 1.9979|   null|  null|null|  null| 2.01|  null|  null|1.0889|0.5222|   null|  null|   null|  null|null|  null|   null|  null|2.0294|  null|     null|  null|      null|       null|   null|  null|0.3663| 0.876|  null|   null|  null|  null|1.1091|0.6982|  null|  null|  null|  null|  null|  null|  null|  null|   null| null|  null|1.8261|  null|     null|\n|       14|null|  null|  null|  null|  null|  null|   null|  null|  null|    null| null|     null|  null|  null|  null|  null|null|  null|     null|  null|  null|  null|  null|  null|       null|  null|  null|      null|   null|  null|     null|      null|     null| null|  null|  null|    null|  null| null|  null| 1.221|   null|0.2226|  null|null|  null|1.3336|1.5346|  null|  0.8961|2.0875|  null|   null|   null|  null|null|  null| null|1.1188|  null|  null|0.5222|   null|  null|   null|  null|null|  null|   null|  null|  null|  null|     null|  null|      null|       null|   null|  null|  null|  null|  null| 1.1667|  null|  null|  null|  null|  null|  null|  null|  null|  null|1.7256|  null|  null|   null| null|  null|  null|  null|     null|\n|       15|null|  null|1.6395|  null|  null|  null|   null|  null|  null|    null| null|     null|1.6681|  null|  null|  null|null|1.8541|     null|  null|3.7876|  null|  null|  null|       null|  null|  null|      null| 5.5297|  null|     null|      null|     null| null| 2.591|1.8682|    null|  null| null|3.1814|  null|   null|0.8903|  null|1.94|  null|2.6673|  null|  null|    null|  null|  null| 1.9979| 4.0909|  null|null|  null| null|  null|  null|1.0889|1.0444|   null|1.5945|   null|  null|null|  null| 2.1525|  null|  null|  null|   1.5724|  null|      null|       null|   null|  null|1.8315|  null|  null| 1.1667|  null|  null|0.5546|1.3965|  null|1.9783|  null|  null|  null|  null|  null|1.4627|   null| null|  null|1.8261|5.5725|     null|\n|       16|null|1.5124|  null|  null|1.6076|1.5705|   null|  null|  null|  1.5476| null|     null|  null|1.5605|  null|  null|null|  null|     null|  null|1.8938|1.8941|  null|  null|       null|1.2326|  null|    2.0157|11.0594|2.0775|     null|    2.0223|     null| null|  null|1.8682|    null|2.0649|1.558|3.1814|0.6105| 1.3578|1.7806|  null|0.97|  null|1.3336|1.5346|  null|    null|  null|1.8844|   null| 2.0455|5.3287|null|4.0887| 2.01|  null|  null|1.0889|1.0444|   null|  null|   null|  null|null|  null|   null|  null|  null|  null|     null|  null|    1.6895|       null| 1.8844|  null|0.7326|  null|3.9532| 4.6668|  null|  null|3.3274|0.6982|  null|1.9783|5.2061|  null|4.7256|  null|  null|  null|   null|1.871|  null|1.8261|  null|     null|\n|       17|null|  null|  null|  null|  null|  null|   null|1.8081|  null|    null| null|   1.7866|  null|1.5605|  null|  null|null|  null|   1.0172|  null|  null|  null|  null|  null|     1.6458|  null|  null|      null|   null|  null|   3.0191|      null|    2.155|1.765|  null|1.8682|    null|  null|0.779|  null|0.6105|   null|2.0031|3.6329|null|  null|  null|  null|2.0557|    null|  null|  null|   null|   null|0.8881|null|  null| null|  null|  null|1.0889|1.0444|   null|  null|   null|  null|null|  null|   null|  null|2.0294|  null|   1.5724|  null|    1.6895|       null|   null|  null|1.0989|  null|1.9766| 1.1667|  null|  null|  null|0.6982|0.8718|1.9783|0.8677|  null|1.1814|  null|1.7727|  null|   null| null|  null|  null|  null|     null|\n|       18|null|  null|  null|1.8679|  null|  null|   null|  null|  null|    null| null|     null|1.6681|  null|  null|  null|null|  null|     null|  null|  null|  null|  null|  null|     1.6458|  null|  null|      null|   null|  null|     null|      null|     null| null|  null|  null|    null|  null|0.779|  null|0.6105| 1.3578|0.2226|  null|null|  null|  null|  null|  null|  0.8961|  null|  null|   null|   null|  null|null|  null|1.005|  null|  null|  null|  null|   null|  null|   null|  null|null|  null|   null|2.1002|  null|  null|     null|  null|      null|      1.635|   null|  null|0.3663|  null|  null|   null|  null|  null|0.5546|0.6982|  null|  null|  null|  null|  null|  null|  null|1.4627|   null| null|  null|  null|  null|     null|\n|       19|null|  null|1.6395|  null|3.2152|  null|   null|  null|3.3764|    null| null|     null|1.6681|  null|1.8255|  null|null|  null|     null|  null|  null|  null|  null|  null|     1.6458|  null|  null|      null|   null|1.0388|     null|      null|     null| null|1.2955|  null|    null|  null| null|  null|  null|   null|1.1129|  null|1.94|  null|5.3345|3.0691|2.0557|    null|  null|  null| 1.9979| 2.0455|  null|null|  null| 2.01|1.1188|1.6519|1.0889|  null|   null|  null|   null|  null|null|  null|   null|  null|  null|4.2961|     null|  null|    1.6895|       null|   null|  null|0.3663|  null|5.9297| 1.1667|  null|  null|0.5546|1.3965|0.8718|  null|  null|  null|1.1814|1.7256|  null|1.4627|   null| null|1.8967|  null|  null|     null|\n+---------+----+------+------+------+------+------+-------+------+------+--------+-----+---------+------+------+------+------+----+------+---------+------+------+------+------+------+-----------+------+------+----------+-------+------+---------+----------+---------+-----+------+------+--------+------+-----+------+------+-------+------+------+----+------+------+------+------+--------+------+------+-------+-------+------+----+------+-----+------+------+------+------+-------+------+-------+------+----+------+-------+------+------+------+---------+------+----------+-----------+-------+------+------+------+------+-------+------+------+------+------+------+------+------+------+------+------+------+------+-------+-----+------+------+------+---------+\nonly showing top 20 rows\n\n\u001b[1m\u001b[34mresult\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m \u003d [review_id: bigint, 10: double ... 99 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d11"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d12"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d13"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d14"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d15"
+            },
+            {
+              "jobUrl": "http://f42d2316e1d7:4040/jobs/job?id\u003d16"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1636200082591_57347765",
+      "id": "paragraph_1636200082591_57347765",
+      "dateCreated": "2021-11-06 12:01:22.591",
+      "dateStarted": "2021-11-06 13:20:51.766",
+      "dateFinished": "2021-11-06 13:21:17.977",
+      "status": "FINISHED"
+    },
+    {
+      "user": "anonymous",
+      "dateUpdated": "2021-11-06 12:38:37.141",
+      "progress": 0,
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1636201897838_1535369784",
+      "id": "paragraph_1636201897838_1535369784",
+      "dateCreated": "2021-11-06 12:31:37.838",
+      "status": "FINISHED"
+    }
+  ],
+  "name": "homework_tfidf",
+  "id": "2GMBR79ZX",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {
+    "isRunning": false
+  }
+}
