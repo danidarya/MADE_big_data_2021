@@ -11,7 +11,7 @@ import org.scalatest.matchers.should
 
 
 class LinearRegressionTest extends AnyFlatSpec with should.Matchers with WithSpark{
-  val params = DenseVector[Double](2, -3, 0.5)
+  val params = DenseVector[Double](1.5, 0.3, -0.7)
   val dataSize = 50
   val delta = 0.01
   val epsMSE = 0.0001
